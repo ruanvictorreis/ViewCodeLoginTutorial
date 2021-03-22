@@ -7,6 +7,11 @@
 
 import UIKit
 
+protocol LoginViewDelegate: AnyObject {
+    
+    func doLogin(email: String, password: String)
+}
+
 class LoginView: UIView {
     
     private lazy var loginTitle: UILabel = {
@@ -44,6 +49,8 @@ class LoginView: UIView {
         return button
     }()
     
+    weak var delegate: LoginViewDelegate?
+    
     init() {
         super.init(frame: .zero)
         setupUI()
@@ -56,7 +63,9 @@ class LoginView: UIView {
     
     @objc
     private func loginButtonTapped() {
-        print("Botão de Login selecionado")
+        let email = emailTextField.text ?? ""
+        let password = passwordTextField.text ?? ""
+        delegate?.doLogin(email: email, password: password)
     }
 }
 
