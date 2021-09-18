@@ -9,20 +9,18 @@ import Foundation
 
 protocol ViewCodeProtocol {
     
-    func setupSubviews()
+    func addSubviews()
     
-    func setupContraints()
+    func makeContraints()
     
-    func setupComponents()
+    func configureViews()
 }
 
 extension ViewCodeProtocol {
     
     func setupUI() {
-        setupSubviews()
-        setupContraints()
-        setupComponents()
+        addSubviews()
+        makeContraints()
+        configureViews()
     }
-    
-    func setupComponents() {}
 }

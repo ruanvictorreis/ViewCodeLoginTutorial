@@ -1,6 +1,6 @@
 //
 //  CustomView.swift
-//  ViewCodeProject
+//  CleanViewCode
 //
 //  Created by Ruan Reis on 17/03/21.
 //
@@ -13,6 +13,8 @@ protocol LoginViewDelegate: AnyObject {
 }
 
 class LoginView: UIView {
+    
+    // MARK: - Components and Subviews
     
     private lazy var loginTitle: UILabel = {
         let label = UILabel()
@@ -28,6 +30,7 @@ class LoginView: UIView {
         textField.placeholder = "E-mail"
         textField.keyboardType = .emailAddress
         textField.borderStyle = .roundedRect
+        textField.autocapitalizationType = .none
         return textField
     }()
     
@@ -49,36 +52,48 @@ class LoginView: UIView {
         return button
     }()
     
-    weak var delegate: LoginViewDelegate?
+    // MARK: - Private Properties
     
-    init() {
+    private unowned var delegate: LoginViewDelegate
+    
+    // MARK: - Initialization
+    
+    init(_ delegate: LoginViewDelegate) {
+        self.delegate = delegate
+        
         super.init(frame: .zero)
         setupUI()
     }
     
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupUI()
+        fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Private Functions
     
     @objc
     private func loginButtonTapped() {
-        let email = emailTextField.text ?? ""
-        let password = passwordTextField.text ?? ""
-        delegate?.doLogin(email: email, password: password)
+        guard
+            let email = emailTextField.text,
+            let password = passwordTextField.text
+        else { return }
+        
+        delegate.doLogin(email: email, password: password)
     }
 }
 
+// MARK: - ViewCodeProtocol Extension
+
 extension LoginView: ViewCodeProtocol {
     
-    func setupSubviews() {
+    func addSubviews() {
         addSubview(loginTitle)
         addSubview(emailTextField)
         addSubview(passwordTextField)
         addSubview(loginButton)
     }
     
-    func setupContraints() {
+    func makeContraints() {
         loginTitle.snp.makeConstraints { make in
             make.left.top.equalTo(safeAreaLayoutGuide).offset(16)
         }
@@ -103,7 +118,8 @@ extension LoginView: ViewCodeProtocol {
         }
     }
     
-    func setupComponents() {
+    func configureViews() {
         backgroundColor = .white
+        loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
     }
 }
