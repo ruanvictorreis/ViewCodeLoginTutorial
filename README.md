@@ -1,2 +1,2 @@
-# Como trabalhar com view code de forma limpa?
+# Como implementar view code de forma limpa?
 
